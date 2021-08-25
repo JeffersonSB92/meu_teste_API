@@ -1,5 +1,6 @@
 package teste;
 
+import dominio.Usuario;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -36,9 +37,10 @@ public class UsuarioTeste {
 
     @Test
     public void criaUsuarioComSucesso(){
+        Usuario usuario = new Usuario("rafael", "eng test");
         given().
             contentType(ContentType.JSON).
-            body("{\"name\": \"rafael\", \"job\": \"eng test\"}").
+            body(usuario).
         when().
             post("/users").
         then().
