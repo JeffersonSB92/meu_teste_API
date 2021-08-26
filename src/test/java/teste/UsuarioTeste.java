@@ -31,7 +31,6 @@ public class UsuarioTeste extends BaseTeste{
     public void criaUsuarioComSucesso(){
         Usuario usuario = new Usuario("rafael", "eng test", "usuario@gmail.com");
         given().
-            contentType(ContentType.JSON).
             body(usuario).
         when().
             post("/users").
