@@ -11,12 +11,15 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class UsuarioTeste extends BaseTeste{
 
+    private static final String LISTA_USUARIOS_ENDPOINT = "/users";
+    private static final String CRIA_USUARIO_ENDPOINT = "/user";
+
     @Test
     public void testeListaMetadadosDoUsuario(){
         given().
             params("page", "2").
         when().
-            get("/users").
+            get(LISTA_USUARIOS_ENDPOINT).
         then().
             statusCode(200). //alterar o valor para 203 ou outro para garantir que o UsuarioTeste.UsuarioTeste falha
             statusCode(HttpStatus.SC_OK).
@@ -33,7 +36,7 @@ public class UsuarioTeste extends BaseTeste{
         given().
             body(usuario).
         when().
-            post("/users").
+            post(CRIA_USUARIO_ENDPOINT).
         then().
             statusCode(HttpStatus.SC_CREATED).
             body("name", is("rafael"));
