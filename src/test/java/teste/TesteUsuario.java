@@ -53,20 +53,35 @@ public class TesteUsuario extends TesteBase {
 
     @Test
     public void testeTamanhoDosItensMostradosIgualAoPerPage() {
+        int paginaEsperada = 2;
+        int perPageEsperado = retornaPerPageEsperado(paginaEsperada);
+
         given().
-                params("page", "2").
-                when().
-                get(LISTA_USUARIOS_ENDPOINT).
-                then().
-                statusCode(HttpStatus.SC_OK).
-                body(
-                    "page", is(2),
-                    "data.size()", is(6),
-                    "data.findAll { it.avatar.startsWith('https://reqres.in')}.size()", is(6)
+            params("page", paginaEsperada).
+        when().
+            get(LISTA_USUARIOS_ENDPOINT).
+        then().
+            statusCode(HttpStatus.SC_OK).
+            body(
+                    "page", is(paginaEsperada),
+                    "data.size()", is(perPageEsperado),
+                    "data.findAll { it.avatar.startsWith('https://reqres.in')}.size()", is(perPageEsperado)
 //o código acima vai no data e acha todos(findAll), dentro das chaves ele
 //percorre todos itens(it) vendo se o avatar inicia com(startsWith) um valor específico
 //fora das chaves botamos o .size() para definir que é dentro do tamanho daquele array
 //e botamos ,is(6) para dizermos que têm de ser 6 posições nesse array
                 );
+    }
+
+    private int retornaPerPageEsperado(int page) {
+        int perPageEsperado = given().
+                        params("page", page).
+                    when().
+                        get(LISTA_USUARIOS_ENDPOINT).
+                    then().
+                        statusCode(HttpStatus.SC_OK).
+                    extract().
+                        path("per_page");
+        return perPageEsperado;
     }
 }
