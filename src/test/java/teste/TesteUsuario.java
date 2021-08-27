@@ -5,13 +5,14 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TesteUsuario extends TesteBase {
 
     private static final String LISTA_USUARIOS_ENDPOINT = "/users";
     private static final String CRIA_USUARIO_ENDPOINT = "/user";
+    private static final String MOSTRAR_USUARIO_ENDPOINT = "/users/{userId}";
 
     @Test
     public void testeExemplos() {
@@ -71,6 +72,22 @@ public class TesteUsuario extends TesteBase {
 //fora das chaves botamos o .size() para definir que é dentro do tamanho daquele array
 //e botamos ,is(6) para dizermos que têm de ser 6 posições nesse array
                 );
+    }
+
+    @Test
+    public void testeMostraUsuarioEspecifico(){
+        Usuario usuario = given().
+            pathParam("userId", 2).
+        when().
+            get(MOSTRAR_USUARIO_ENDPOINT).
+        then().
+            statusCode(HttpStatus.SC_OK).
+        extract().
+            body().jsonPath().getObject("data", Usuario.class);
+
+        assertThat(usuario.getEmail(), containsString( "@reqres.in"));
+        assertThat(usuario.getName(), is("Janet"));
+        assertThat(usuario.getLastName(), is("Weaver"));
     }
 
     private int retornaPerPageEsperado(int page) {

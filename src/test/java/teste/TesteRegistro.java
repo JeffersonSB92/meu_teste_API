@@ -35,7 +35,8 @@ public class TesteRegistro extends TesteBase {
         then().
             body("error", is("Missing password"));
     }
-
+//Esse teste deveria estar em uma classe TesteLogin, porém está aqui para mostrar
+// a funcionalidade de múltiplos setups e ResponseSpec
     @Test
     public void testeLoginNaoEfetuadoQuandoSenhaEstaFaltando(){
         Usuario usuario = new Usuario();
