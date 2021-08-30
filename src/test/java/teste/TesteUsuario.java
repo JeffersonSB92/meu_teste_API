@@ -1,5 +1,6 @@
 package teste;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dominio.Usuario;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
@@ -14,42 +15,46 @@ public class TesteUsuario extends TesteBase {
     private static final String CRIA_USUARIO_ENDPOINT = "/user";
     private static final String MOSTRAR_USUARIO_ENDPOINT = "/users/{userId}";
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Test
     public void testeExemplos() {
+
         given().
-                params("page", "2").
-                when().
-                get(LISTA_USUARIOS_ENDPOINT).
-                then().
-                statusCode(200). //alterar o valor para 203 ou outro para garantir que o TesteUsuario.TesteUsuario falha
-                statusCode(HttpStatus.SC_OK).
-                body("per_page", is(6)).
-                body("data[0].email", is("michael.lawson@reqres.in")).
-                body("data[0].first_name", is("Michael"));
+            param("page", "2").
+        when().
+            get(LISTA_USUARIOS_ENDPOINT).
+        then().
+            statusCode(200). //alterar o valor para 203 ou outro para garantir que o TesteUsuario.TesteUsuario falha
+            statusCode(HttpStatus.SC_OK).
+            body("per_page", is(6)).
+            body("data[0].email", is("michael.lawson@reqres.in")).
+            body("data[0].first_name", is("Michael"));
     }
 
     @Test
     public void testeMostraPaginaEspecifica() {
+
         given().
-                params("page", "2").
-                when().
-                get(LISTA_USUARIOS_ENDPOINT).
-                then().
-                statusCode(HttpStatus.SC_OK).
-                body("page", is(2)).
-                body("data", is(notNullValue()));
+            param("page", "2").
+        when().
+            get(LISTA_USUARIOS_ENDPOINT).
+        then().
+            statusCode(HttpStatus.SC_OK).
+            body("page", is(2)).
+            body("data", is(notNullValue()));
     }
 
     @Test
     public void testeCriaUsuarioComSucesso() {
-        Usuario usuario = new Usuario("rafael", "eng test", "usuario@gmail.com");
+        Usuario usuario = new Usuario("rafael", "eng test", "usuario@gmail.com", "lima");
+
         given().
-                body(usuario).
-                when().
-                post(CRIA_USUARIO_ENDPOINT).
-                then().
-                statusCode(HttpStatus.SC_CREATED).
-                body("name", is("rafael"));
+            body(usuario).
+        when().
+            post(CRIA_USUARIO_ENDPOINT).
+        then().
+            statusCode(HttpStatus.SC_CREATED).
+            body("name", is("rafael"));
     }
 
     @Test
@@ -76,6 +81,7 @@ public class TesteUsuario extends TesteBase {
 
     @Test
     public void testeMostraUsuarioEspecifico(){
+
         Usuario usuario = given().
             pathParam("userId", 2).
         when().
@@ -91,14 +97,15 @@ public class TesteUsuario extends TesteBase {
     }
 
     private int retornaPerPageEsperado(int page) {
+
         int perPageEsperado = given().
-                        params("page", page).
-                    when().
-                        get(LISTA_USUARIOS_ENDPOINT).
-                    then().
-                        statusCode(HttpStatus.SC_OK).
-                    extract().
-                        path("per_page");
-        return perPageEsperado;
+                params("page", page).
+            when().
+                get(LISTA_USUARIOS_ENDPOINT).
+            then().
+                statusCode(HttpStatus.SC_OK).
+            extract().
+                path("per_page");
+                return perPageEsperado;
     }
 }

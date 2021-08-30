@@ -2,8 +2,12 @@ package dominio;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true) //ignora argumentos não usados do construtor
+@Data //equivale ao @Getter e ao @Setter
+@AllArgsConstructor //cria construtor com todos argumentos
+@NoArgsConstructor //cria o construtor padrão sem argumentps
 public class Usuario {
 
     @JsonAlias("first_name")
@@ -12,36 +16,4 @@ public class Usuario {
     private String email;
     @JsonAlias("last_name")
     private String lastName;
-
-    public Usuario(){};
-
-    public Usuario(String name, String job, String email) {
-        this.name = name;
-        this.job = job;
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }

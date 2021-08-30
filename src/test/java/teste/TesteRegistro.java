@@ -3,7 +3,6 @@ package teste;
 import dominio.Usuario;
 import io.restassured.RestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,12 +18,13 @@ public class TesteRegistro extends TesteBase {
     @BeforeAll
     public static void setupRegistro(){
         RestAssured.responseSpecification = new ResponseSpecBuilder()
-                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .build();
+            .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+            .build();
     }
 
     @Test
     public void testeNaoEfetuaRegistroSemSenha(){
+
         Usuario usuario = new Usuario();
         usuario.setEmail("sydney@fife");
 
@@ -39,15 +39,15 @@ public class TesteRegistro extends TesteBase {
 // a funcionalidade de múltiplos setups e ResponseSpec
     @Test
     public void testeLoginNaoEfetuadoQuandoSenhaEstaFaltando(){
+
         Usuario usuario = new Usuario();
         usuario.setEmail("sydney@fife");
 
         given().
-                body(usuario).
-                when().
-                post(LOGIN_USUARIO_ENDPOINT).
-                then().
-                body("error", is("Missing password"));
+            body(usuario).
+        when().
+            post(LOGIN_USUARIO_ENDPOINT).
+        then().
+            body("error", is("Missing password"));
     }
-
 }
